@@ -1,14 +1,7 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  OnDestroy,
-  ElementRef,
-  ViewChild,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Podcast } from '../../services/podcast.service';
 
 @Component({
@@ -20,26 +13,34 @@ import { Podcast } from '../../services/podcast.service';
       class="video-card-container"
       (mouseenter)="onMouseEnter()"
       (mouseleave)="onMouseLeave()"
-      (click)="playFullVideo()"
+      (click)="playFullVideo($event)"
       [class.is-hovered]="showPopup"
     >
       <!-- Base Card (Thumbnail) -->
       <div class="base-card">
         <img [src]="podcast.thumbnailUrl" [alt]="podcast.title" loading="lazy" />
-        <h3 class="title-overlay" *ngIf="!showPopup">{{ podcast.title }}</h3>
+        @if (!showPopup) {
+        <h3 class="title-overlay">{{ podcast.title }}</h3>
+        }
       </div>
 
       <!-- Popup Card (Video Player) -->
-      <div class="popup-card" *ngIf="showPopup" [style.transform-origin]="transformOrigin">
+      @if (showPopup) {
+      <div class="popup-card" [style.transform-origin]="transformOrigin">
         <div class="video-wrapper">
-          <video
-            #videoPlayer
-            [src]="podcast.videoUrl"
-            [muted]="isMuted"
-            autoplay
-            loop
-            playsinline
-          ></video>
+          <!-- YouTube Embed -->
+          @if (safeUrl) {
+          <iframe
+            [src]="safeUrl"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          >
+          </iframe>
+          }
+
           <div class="controls">
             <button (click)="toggleMute($event)" class="control-btn mute-btn">
               {{ isMuted ? '🔇' : '🔊' }}
@@ -65,40 +66,55 @@ import { Podcast } from '../../services/podcast.service';
           </div>
         </div>
       </div>
+      }
     </div>
   `,
   styleUrls: ['./video-card.component.css'],
 })
 export class VideoCardComponent implements OnDestroy {
   @Input() podcast!: Podcast;
-  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   showPopup = false;
   isMuted = true;
   hoverTimeout: any;
   transformOrigin = 'center center';
+  safeUrl: SafeResourceUrl | undefined;
 
-  constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private router: Router) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private el: ElementRef,
+    private router: Router,
+    private sanitizer: DomSanitizer
+  ) {}
 
   onMouseEnter() {
     this.hoverTimeout = setTimeout(() => {
       this.calculateTransformOrigin();
       this.showPopup = true;
-      this.cdr.detectChanges(); // Force check to render video tag
-      if (this.videoPlayer) {
-        this.videoPlayer.nativeElement.play().catch((e) => console.log('Autoplay blocked', e));
-      }
+      this.updateVideoUrl();
+      this.cdr.detectChanges();
     }, 600); // 600ms delay like Netflix
   }
 
   onMouseLeave() {
     clearTimeout(this.hoverTimeout);
     this.showPopup = false;
+    this.safeUrl = undefined; // Stop video
   }
 
   toggleMute(event: Event) {
     event.stopPropagation();
     this.isMuted = !this.isMuted;
+    this.updateVideoUrl(); // Re-load iframe with new mute state
+  }
+
+  updateVideoUrl() {
+    // YouTube Embed params: autoplay=1, controls=0, mute=1 (if muted), distinct playlist for looping
+    const muteParam = this.isMuted ? '1' : '0';
+    const videoId = this.podcast.id;
+    // loop=1 requires playlist=VIDEO_ID
+    const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=${muteParam}&controls=0&modestbranding=1&loop=1&playlist=${videoId}`;
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   playFullVideo(event?: Event) {

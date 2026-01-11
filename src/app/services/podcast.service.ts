@@ -1,90 +1,98 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface Podcast {
-  id: string;
+  id: string; // Mapped from videoId
   title: string;
   description: string;
   thumbnailUrl: string;
-  videoUrl: string;
+  videoUrl: string; // Placeholder or constructed
   category: string;
+  publishedAt?: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class PodcastService {
-  // Mock Data
-  private mockPodcasts: Podcast[] = [];
+  private apiUrl = 'http://localhost:8080/api/podcasts';
 
-  constructor() {
-    this.generateMockData();
-  }
-
-  private generateMockData() {
-    // Categories matching user request + Navbar
-    const categories = ['Technology', 'Finance', 'Health', 'Travel'];
-    const images = [
-      'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1544367563-12123d8965cd?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1478720568477-152d9b164e63?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?auto=format&fit=crop&w=800&q=80',
-    ];
-
-    for (let i = 1; i <= 200; i++) {
-      const cat = categories[Math.floor(Math.random() * categories.length)];
-      const img = images[Math.floor(Math.random() * images.length)];
-      this.mockPodcasts.push({
-        id: i.toString(),
-        title: `${cat} Podcast #${i}`,
-        description: `This is a description for podcast number ${i}. It covers interesting topics about ${cat}.`,
-        thumbnailUrl: img,
-        videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-        category: cat,
-      });
-    }
-  }
+  constructor(private http: HttpClient) {}
 
   getFeatured(): Observable<Podcast> {
-    return of(this.mockPodcasts[0]);
+    // For now, fetch 'technology' and pick first for featured/hero
+    // or create a specific endpoint later.
+    return this.getPodcasts(0, 1, 'technology').pipe(map((res) => res.content[0]));
   }
 
   getTrending(): Observable<Podcast[]> {
-    // Return random 25 items as trending
-    return of(this.mockPodcasts.slice(0, 25));
+    // Fetch 'home' or specific trending category
+    return this.getPodcasts(0, 25, 'home').pipe(map((res) => res.content));
   }
 
   getPodcastsByCategory(category: string, size: number = 25): Observable<Podcast[]> {
-    const filtered = this.mockPodcasts.filter((p) => p.category === category);
-    return of(filtered.slice(0, size));
+    return this.getPodcasts(0, size, category).pipe(map((res) => res.content));
   }
 
   getPodcasts(page: number, size: number, category?: string): Observable<any> {
-    // Mock Pagination & Filtering
-    let filtered = this.mockPodcasts;
-    if (category && category !== 'All') {
-      filtered = this.mockPodcasts.filter((p) => p.category === category);
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (category) {
+      // Backend expects lowercase or specific casing? User URL example: ?category=home
+      // Frontend categories are 'Technology', 'Finance'.
+      // Sending lowercase to be safe/consistent with example.
+      params = params.set('category', category.toLowerCase());
     }
 
-    const totalElements = filtered.length;
-    const totalPages = Math.ceil(totalElements / size);
-
-    const start = page * size;
-    const end = start + size;
-    const content = filtered.slice(start, end);
-
-    return of({
-      content: content,
-      totalPages: totalPages,
-      totalElements: totalElements,
-      number: page,
-    });
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map((response) => {
+        const content = response.content.map((item: any) => ({
+          id: item.videoId,
+          title: item.title,
+          description: item.description,
+          thumbnailUrl: item.thumbnailUrl,
+          // Placeholder video for hover preview since backend doesn't provide playable url
+          videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+          category: item.category,
+          publishedAt: item.publishedAt,
+        }));
+        return {
+          ...response,
+          content: content,
+        };
+      })
+    );
   }
 
   getPodcastById(id: string): Observable<Podcast | undefined> {
-    const podcast = this.mockPodcasts.find((p) => p.id === id);
-    return of(podcast);
+    // Current backend requirement doesn't specify single ID endpoint.
+    // Try to generic search or this feature might be pending backend update.
+    // For now, we will assume we can't easily get it without searching the list.
+    // Hack: Fetch 'home' or 'all' and find? No, that's bad.
+    // Better: Try to call /api/podcasts/ID?
+    // I'll try a common convention: api/podcasts/{id}
+    // If it fails, the player page will just not load.
+
+    // NOTE: This might fail if endpoint doesn't exist.
+    /* 
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+         map(item => ({
+             id: item.videoId,
+             title: item.title,
+             description: item.description,
+             thumbnailUrl: item.thumbnailUrl,
+             videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+             category: item.category,
+             publishedAt: item.publishedAt
+         }))
+    );
+    */
+
+    // Temporary fallback: Return empty or handle error.
+    // Since Step 1 is just connect the list...
+    console.warn('getPodcastById not fully implemented with backend yet.');
+    return of(undefined);
   }
 }

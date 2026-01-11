@@ -1,4 +1,5 @@
-<nav class="navbar" *ngIf="isVisible()" [ngClass]="{'scrolled': isScrolled(), 'hidden': isHidden()}">
+@if (isVisible()) {
+<nav class="navbar" [ngClass]="{'scrolled': isScrolled(), 'hidden': isHidden()}">
     <div class="left-section">
         <div class="logo">PODFLIX</div>
 
@@ -16,7 +17,8 @@
             <span>Browse</span>
             <span class="caret">▼</span>
 
-            <div class="mobile-dropdown" *ngIf="isMobileMenuOpen()">
+            @if (isMobileMenuOpen()) {
+            <div class="mobile-dropdown">
                 <div class="arrow-up"></div>
                 <a routerLink="/home">Home</a>
                 <a routerLink="/browse" [queryParams]="{category: 'Tech'}">Technology</a>
@@ -25,6 +27,7 @@
                 <a routerLink="/browse" [queryParams]="{category: 'Health'}">Health</a>
                 <a routerLink="/my-list">My List</a>
             </div>
+            }
         </div>
     </div>
 
@@ -38,10 +41,12 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <div class="search-input-wrapper" *ngIf="isSearchOpen()">
+            @if (isSearchOpen()) {
+            <div class="search-input-wrapper">
                 <input type="text" id="searchInput" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
                     (keyup.enter)="submitSearch()" placeholder="Titles, people, genres" />
             </div>
+            }
         </div>
 
         <div class="nav-item">Children</div>
@@ -54,3 +59,4 @@
         </div>
     </div>
 </nav>
+}
