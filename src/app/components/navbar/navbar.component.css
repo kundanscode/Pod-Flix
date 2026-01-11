@@ -1,0 +1,243 @@
+/* Navbar Base */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 68px;
+  /* Standard Netflix navbar height */
+  padding: 0 4%;
+  /* 4% padding typical of Netflix */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  transition: background-color 0.4s ease-in-out, top 0.3s;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 10%, rgba(0, 0, 0, 0));
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Netflix font stack */
+}
+
+.navbar.scrolled {
+  background-color: #141414;
+  /* Netflix black */
+}
+
+.navbar.hidden {
+  top: -70px;
+}
+
+/* Logo */
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+    color: #e50914;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Desktop Links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #e5e5e5;
+  font-size: 14px;
+  transition: color 0.3s;
+  font-weight: 500;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #ffffff;
+  font-weight: 700;
+  /* Bold active state */
+}
+
+/* Mobile Browse / Breadcrumb (Hidden on Desktop) */
+.mobile-browse {
+  display: none;
+  align-items: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  position: relative;
+  user-select: none;
+}
+
+.mobile-browse .caret {
+  font-size: 10px;
+  margin-left: 5px;
+  transition: transform 0.3s;
+}
+
+.mobile-dropdown {
+  position: absolute;
+  top: 40px;
+  /* Below "Browse" */
+  left: -80px;
+  /* Align slightly left */
+  width: 250px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.mobile-dropdown .arrow-up {
+  position: absolute;
+  top: -10px;
+  left: 110px;
+  /* Center arrow relative to trigger */
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #e5e5e5;
+  /* Little white arrow tip */
+}
+
+.mobile-dropdown a {
+  color: #b3b3b3;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.mobile-dropdown a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+
+/* Right Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  font-size: 14px;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 5px;
+  transition: all 0.3s ease;
+}
+
+.search-container.active {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #e5e5e5;
+}
+
+.search-icon {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.search-svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+}
+
+.search-input-wrapper {
+  margin-left: 10px;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  display: flex;
+  /* Fix alignment */
+  align-items: center;
+}
+
+.search-container.active .search-input-wrapper {
+  width: 210px;
+  /* Expand width */
+}
+
+.search-container input {
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+
+/* Profile */
+.profile-menu {
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-menu img {
+  height: 32px;
+  width: 32px;
+  border-radius: 4px;
+}
+
+.profile-menu .caret {
+  font-size: 10px;
+  margin-left: 5px;
+  transition: transform 0.3s;
+}
+
+
+/* Responsive Config */
+@media (max-width: 880px) {
+
+  /* Breakpoint for Tablet/Mobile */
+  .nav-links.desktop-only {
+    display: none;
+  }
+
+  .mobile-browse {
+    display: flex;
+  }
+
+  .logo img {
+    margin-right: 10px;
+  }
+
+  /* Search Collapse Logic */
+  .search-container.active {
+    position: absolute;
+    right: 60px;
+    /* Next to bell/profile */
+    background: #000;
+    z-index: 1001;
+    /* On top */
+  }
+}

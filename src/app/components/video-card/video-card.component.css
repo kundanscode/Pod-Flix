@@ -1,0 +1,198 @@
+:host {
+    display: block;
+    position: relative;
+    /* Aspect ratio 16:9 for the card container */
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+.video-card-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* transition: z-index 0s step-end 0.3s; */
+}
+
+.video-card-container.is-hovered {
+    z-index: 100 !important;
+}
+
+/* Base Card */
+.base-card {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+.base-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.title-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    font-size: 0.9rem;
+    margin: 0;
+    text-shadow: 1px 1px 2px black;
+}
+
+/* Popup Card - The Expanded View */
+.popup-card {
+    position: absolute;
+    width: 150%; /* Scale up by 1.5x */
+    height: auto;
+    top: -50%; /* Center vertically approx */
+    left: -25%; /* Center horizontally approx */
+    background-color: #141414;
+    border-radius: 6px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    z-index: 999;
+    
+    /* Animation */
+    animation: popup-scale 0.3s forwards ease-in-out;
+    transform-origin: center center;
+    overflow: hidden;
+}
+
+@keyframes popup-scale {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: black;
+}
+
+.video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Controls Overlay */
+.controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.mute-btn {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.mute-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+}
+
+/* Info Section (Below Video) */
+.info-mask {
+    padding: 12px;
+    background-color: #141414;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mini-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.play-btn {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.play-btn:hover {
+    background-color: #ddd;
+}
+
+.add-btn, .like-btn {
+    background: transparent;
+    border: 2px solid #808080;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.add-btn:hover, .like-btn:hover {
+    border-color: white;
+}
+
+.info-mask h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.meta-tags {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    align-items: center;
+}
+
+.match-score { color: #46d369; font-weight: bold; }
+.rating { border: 1px solid #666; padding: 0 4px; font-size: 10px; }
+.duration { color: #999; }
+
+.genres {
+    display: flex;
+    gap: 6px;
+    font-size: 12px;
+    color: #fff;
+    flex-wrap: wrap;
+}
+
+.genres span {
+    position: relative;
+}
+.genres span:not(:last-child)::after {
+    content: "•";
+    color: #666;
+    margin-left: 6px;
+    position: absolute;
+    right: -10px;
+}

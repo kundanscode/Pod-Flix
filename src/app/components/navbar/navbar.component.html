@@ -1,0 +1,56 @@
+<nav class="navbar" *ngIf="isVisible()" [ngClass]="{'scrolled': isScrolled(), 'hidden': isHidden()}">
+    <div class="left-section">
+        <div class="logo">PODFLIX</div>
+
+        <!-- Desktop Links -->
+        <div class="nav-links desktop-only">
+            <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+            <a routerLink="/browse" [queryParams]="{category: 'Technology'}" routerLinkActive="active">Technology</a>
+            <a routerLink="/browse" [queryParams]="{category: 'Travel'}" routerLinkActive="active">Travel</a>
+            <a routerLink="/browse" [queryParams]="{category: 'Finance'}" routerLinkActive="active">Finance</a>
+            <a routerLink="/browse" [queryParams]="{category: 'Health'}" routerLinkActive="active">Health</a>
+        </div>
+
+        <!-- Mobile Breadcrumb/Menu -->
+        <div class="mobile-browse" (click)="toggleMobileMenu()">
+            <span>Browse</span>
+            <span class="caret">▼</span>
+
+            <div class="mobile-dropdown" *ngIf="isMobileMenuOpen()">
+                <div class="arrow-up"></div>
+                <a routerLink="/home">Home</a>
+                <a routerLink="/browse" [queryParams]="{category: 'Tech'}">Technology</a>
+                <a routerLink="/browse" [queryParams]="{category: 'Travel'}">Travel</a>
+                <a routerLink="/browse" [queryParams]="{category: 'Finance'}">Finance</a>
+                <a routerLink="/browse" [queryParams]="{category: 'Health'}">Health</a>
+                <a routerLink="/my-list">My List</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-actions">
+        <div class="search-container" [class.active]="isSearchOpen()">
+            <button class="search-icon" (click)="toggleSearch()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    class="search-svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M13 11C13 13.7614 10.7614 16 8 16C5.23858 16 3 13.7614 3 11C3 8.23858 5.23858 6 8 6C10.7614 6 13 8.23858 13 11ZM14.0711 14.0711C16.0237 12.1184 16.0237 8.95262 14.0711 7C12.1184 5.04738 8.95262 5.04738 7 7C5.04738 8.95262 5.04738 12.1184 7 14.0711C8.95262 16.0237 12.1184 16.0237 14.0711 14.0711ZM16 16L21 21L16 16Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <div class="search-input-wrapper" *ngIf="isSearchOpen()">
+                <input type="text" id="searchInput" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
+                    (keyup.enter)="submitSearch()" placeholder="Titles, people, genres" />
+            </div>
+        </div>
+
+        <div class="nav-item">Children</div>
+        <div class="nav-item"><i class="fas fa-bell"></i></div>
+
+        <div class="profile-menu">
+            <img src="https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg"
+                alt="User" />
+            <span class="caret">▼</span>
+        </div>
+    </div>
+</nav>
