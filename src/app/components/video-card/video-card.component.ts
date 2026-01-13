@@ -20,7 +20,7 @@ import { Podcast } from '../../services/podcast.service';
       <div class="base-card">
         <img [src]="podcast.thumbnailUrl" [alt]="podcast.title" loading="lazy" />
         @if (!showPopup) {
-        <h3 class="title-overlay">{{ podcast.title }}</h3>
+        <!-- <h3 class="title-overlay">{{ podcast.title }}</h3> -->
         }
       </div>
 

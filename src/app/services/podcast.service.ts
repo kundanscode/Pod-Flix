@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 export interface Podcast {
   id: string; // Mapped from videoId
   title: string;
@@ -17,7 +19,7 @@ export interface Podcast {
   providedIn: 'root',
 })
 export class PodcastService {
-  private apiUrl = 'http://localhost:8080/api/podcasts';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
