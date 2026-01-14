@@ -19,7 +19,7 @@ export interface Podcast {
   providedIn: 'root',
 })
 export class PodcastService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl + '/podcasts';
 
   constructor(private http: HttpClient) {}
 

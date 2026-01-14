@@ -30,8 +30,13 @@
 }
 
 .logo {
-    height: 45px;
+    color: #e50914;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
+
 
 .login-card {
     position: absolute;
@@ -113,5 +118,16 @@ input:focus {
 
 .small-text {
     font-size: 13px;
-    margin-top: 10px;
+}
+
+.error-message {
+    color: #e87c03;
+    font-size: 13px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+input.error {
+    border-bottom: 2px solid #e87c03;
+    padding-bottom: 12px;
 }

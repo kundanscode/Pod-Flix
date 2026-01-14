@@ -32,7 +32,7 @@ import { VideoCardComponent } from '../video-card/video-card.component';
         <div class="hero-vignette"></div>
         <div class="hero-content">
           <h1>{{ hero.title }}</h1>
-          <p>{{ hero.description }}</p>
+          <!-- <p>{{ hero.description }}</p> -->
           <div class="hero-actions">
             <button class="play-btn" (click)="playHero()"><span class="icon">▶</span> Play</button>
             <button class="info-btn"><span class="icon">ℹ</span> More Info</button>

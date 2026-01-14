@@ -32,7 +32,7 @@
     </div>
 
     <div class="nav-actions">
-        <div class="search-container" [class.active]="isSearchOpen()">
+        <!-- <div class="search-container" [class.active]="isSearchOpen()">
             <button class="search-icon" (click)="toggleSearch()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                     class="search-svg">
@@ -47,15 +47,24 @@
                     (keyup.enter)="submitSearch()" placeholder="Titles, people, genres" />
             </div>
             }
-        </div>
+        </div> -->
 
-        <div class="nav-item">Children</div>
-        <div class="nav-item"><i class="fas fa-bell"></i></div>
+        <!-- <div class="nav-item">Children</div> -->
+        <!-- <div class="nav-item"><i class="fas fa-bell"></i></div> -->
 
-        <div class="profile-menu">
+        <div class="profile-menu" (click)="toggleProfileMenu()">
             <img src="https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg"
                 alt="User" />
             <span class="caret">▼</span>
+
+            @if (isProfileMenuOpen()) {
+            <div class="profile-dropdown">
+                <div class="arrow-up"></div>
+                <div class="profile-dropdown-item" (click)="logout()">
+                    Sign out
+                </div>
+            </div>
+            }
         </div>
     </div>
 </nav>

@@ -195,11 +195,12 @@
 /* Profile */
 .profile-menu {
   border-radius: 4px;
-  overflow: hidden;
+  /* overflow: hidden;  <-- REMOVED because it clips the dropdown */
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 5px;
+  position: relative;
 }
 
 .profile-menu img {
@@ -212,6 +213,45 @@
   font-size: 10px;
   margin-left: 5px;
   transition: transform 0.3s;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 180px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.profile-dropdown .arrow-up {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #e5e5e5;
+}
+
+.profile-dropdown-item {
+  color: #b3b3b3;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.profile-dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-decoration: underline;
 }
 
 
