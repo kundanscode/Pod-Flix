@@ -5,19 +5,23 @@
     margin-bottom: 20px;
 }
 
-.hero-bg {
+/* Hero Video Wrapper */
+.hero-video-wrapper {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    overflow: hidden;
+    z-index: -2;
 }
 
-.hero-bg img {
+.hero-video-wrapper iframe {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: scale(1.5); /* Slight zoom to cover edges */
+    pointer-events: none; /* User clicks UI, not video */
 }
 
 .hero-vignette {
@@ -27,6 +31,72 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(to top, #141414 10%, transparent 50%);
+    z-index: -1;
+}
+
+/* Mute Button */
+.mute-btn {
+    position: absolute;
+    bottom: 30%; /* Align roughly with content bottom */
+    right: 4%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background 0.2s, border-color 0.2s;
+    z-index: 10;
+}
+
+.mute-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+/* Pagination (Copied from Browse) */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+    color: white;
+}
+  
+.nav-btn {
+    background: #e50914;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+  
+.nav-btn:hover:not(:disabled) {
+    background: #f40612;
+}
+  
+.nav-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+  
+.page-info {
+    font-size: 1.1rem;
+    font-weight: bold;
 }
 
 .hero-content {
@@ -62,82 +132,32 @@
     color: white;
 }
 
-/* Rows */
-.row-container {
+/* Main Container */
+.main-container {
     padding-left: 4%;
+    padding-right: 4%;
     margin-bottom: 40px;
 }
 
-.row {
-    display: flex;
-    overflow-x: scroll;
-    padding: 20px 0;
-    gap: 10px;
+.main-container h2 {
+    margin-bottom: 20px;
 }
 
-.row::-webkit-scrollbar {
-    display: none;
-    /* Hide scrollbar for cleaner look */
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1vw;
+    padding-bottom: 40px;
 }
 
-/* Card & Hover Effects */
-.podcast-card {
-    position: relative;
-    min-width: 200px;
-    height: 120px;
-    background-color: #333;
-    border-radius: 4px;
-    transition: transform 0.3s ease, z-index 0.3s;
-    cursor: pointer;
+.card-wrapper {
+    aspect-ratio: 16/9;
 }
 
-.podcast-card:hover {
-    transform: scale(1.5);
-    z-index: 100;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-/* Video Preview */
-.video-preview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.card-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.video-controls {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-}
-
-.video-controls button {
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid white;
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Ensure responsiveness */
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
 }

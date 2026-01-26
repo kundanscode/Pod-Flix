@@ -29,9 +29,9 @@ export class PodcastService {
     return this.getPodcasts(0, 1, 'technology').pipe(map((res) => res.content[0]));
   }
 
-  getTrending(): Observable<Podcast[]> {
+  getTrending(page: number = 0, size: number = 25): Observable<any> {
     // Fetch 'home' or specific trending category
-    return this.getPodcasts(0, 25, 'home').pipe(map((res) => res.content));
+    return this.getPodcasts(page, size, 'home');
   }
 
   getPodcastsByCategory(category: string, size: number = 25): Observable<Podcast[]> {
@@ -49,8 +49,23 @@ export class PodcastService {
     }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(
-      map((response) => {
-        const content = response.content.map((item: any) => ({
+      map((response: any) => {
+        // Debugging: Log full response to see structure
+        console.log('API Response:', response);
+
+        // Robust Content Extraction
+        let rawContent: any[] = [];
+        if (response.content) {
+          rawContent = response.content;
+        } else if (response.data) {
+          rawContent = response.data;
+        } else if (response._embedded && response._embedded.podcastDTOList) {
+          rawContent = response._embedded.podcastDTOList;
+        } else if (Array.isArray(response)) {
+          rawContent = response;
+        }
+
+        const content = rawContent.map((item: any) => ({
           id: item.videoId,
           title: item.title,
           description: item.description,
@@ -60,11 +75,21 @@ export class PodcastService {
           category: item.category,
           publishedAt: item.publishedAt,
         }));
+
+        // Robust Pagination Extraction
+        let totalPages = 0;
+        if (response.totalPages !== undefined) {
+          totalPages = response.totalPages;
+        } else if (response.page && response.page.totalPages !== undefined) {
+          totalPages = response.page.totalPages;
+        }
+
         return {
           ...response,
           content: content,
+          totalPages: totalPages,
         };
-      })
+      }),
     );
   }
 

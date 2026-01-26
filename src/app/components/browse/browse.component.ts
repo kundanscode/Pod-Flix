@@ -16,37 +16,37 @@ import { VideoCardComponent } from '../video-card/video-card.component';
     <div class="browse-container">
       <!-- Hero Section -->
       @if (featuredPodcast(); as hero) {
-      <div class="hero-section">
-        <div class="hero-video-wrapper">
-          @if (featuredVideoUrl()) {
-          <iframe
-            [src]="featuredVideoUrl()"
-            frameborder="0"
-            title="Hero Video"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          >
-          </iframe>
-          }
-        </div>
-        <div class="hero-vignette"></div>
-        <div class="hero-content">
-          <h1>{{ hero.title }}</h1>
-          <!-- <p>{{ hero.description }}</p> -->
-          <div class="hero-actions">
-            <button class="play-btn" (click)="playHero()"><span class="icon">▶</span> Play</button>
-            <button class="info-btn"><span class="icon">ℹ</span> More Info</button>
+        <div class="hero-section">
+          <div class="hero-video-wrapper">
+            @if (featuredVideoUrl()) {
+              <iframe
+                [src]="featuredVideoUrl()"
+                frameborder="0"
+                title="Hero Video"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            }
           </div>
-        </div>
+          <div class="hero-vignette"></div>
+          <div class="hero-content">
+            <h1>{{ hero.title }}</h1>
+            <!-- <p>{{ hero.description }}</p> -->
+            <div class="hero-actions">
+              <button class="play-btn" (click)="playHero()"><span class="icon">▶</span> Pl</button>
+              <button class="info-btn"><span class="icon">ℹ</span> More Info</button>
+            </div>
+          </div>
 
-        <button class="mute-btn" (click)="toggleHeroMute()">
-          @if (isHeroMuted()) {
-          <span class="icon">🔇</span>
-          } @else {
-          <span class="icon">🔊</span>
-          }
-        </button>
-      </div>
+          <button class="mute-btn" (click)="toggleHeroMute()">
+            @if (isHeroMuted()) {
+              <span class="icon">🔇</span>
+            } @else {
+              <span class="icon">🔊</span>
+            }
+          </button>
+        </div>
       }
 
       <div class="category-header">
@@ -54,33 +54,37 @@ import { VideoCardComponent } from '../video-card/video-card.component';
       </div>
 
       <div class="grid">
-        @if (isLoading()) { @for (item of skeletonItems; track item) {
-        <div class="skeleton-card"></div>
-        } } @else { @for (podcast of podcasts(); track podcast.id) {
-        <div class="card-wrapper">
-          <app-video-card [podcast]="podcast"></app-video-card>
-        </div>
-        } }
+        @if (isLoading()) {
+          @for (item of skeletonItems; track item) {
+            <div class="skeleton-card"></div>
+          }
+        } @else {
+          @for (podcast of podcasts(); track podcast.id) {
+            <div class="card-wrapper">
+              <app-video-card [podcast]="podcast"></app-video-card>
+            </div>
+          }
+        }
       </div>
 
       <!-- Netflix Style Pagination -->
       @if (!isLoading() && totalPages() > 1) {
-      <div class="pagination">
-        <button class="nav-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
-          <span class="icon">‹</span> Previous
-        </button>
+        <div class="pagination">
+          <button class="nav-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
+            <span class="icon">‹</span> Previous
+          </button>
 
-        <!-- Optional: Page indicator like '1 of 5' or just buttons -->
-        <div class="page-info">{{ currentPage() + 1 }} ... {{ totalPages() }}</div>
+          <!-- Optional: Page indicator like '1 of 5' or just buttons -->
+          <div class="page-info">{{ currentPage() + 1 }} ... {{ totalPages() }}</div>
 
-        <button
-          class="nav-btn"
-          (click)="nextPage()"
-          [disabled]="currentPage() === totalPages() - 1"
-        >
-          Next <span class="icon">›</span>
-        </button>
-      </div>
+          <button
+            class="nav-btn"
+            (click)="nextPage()"
+            [disabled]="currentPage() === totalPages() - 1"
+          >
+            Next <span class="icon">›</span>
+          </button>
+        </div>
       }
     </div>
   `,
@@ -107,7 +111,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
     private podcastService: PodcastService,
     private route: ActivatedRoute,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
@@ -185,7 +189,7 @@ export class BrowseComponent implements OnInit, OnDestroy {
           func: command,
           args: [],
         }),
-        '*'
+        '*',
       );
     }
   }
